@@ -2,8 +2,9 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +12,52 @@ import vo.MemberVO;
 import vo.NewsVO;
 
 public class MemberDAO {
-	public List<NewsVO> listAll(){
-		return null;
+	public ArrayList<MemberVO> listAll(){
+		  
+	      ArrayList<MemberVO> list = new ArrayList<>();
+	      Connection conn = NewsMySQL.connect();
+	      
+	      try (Statement stmt = conn.createStatement();
+	            ResultSet rs = stmt.executeQuery("select ID,  pw, name ,phone) "
+	                  + "from jdbcdb.member ;");){   
+	         
+	         while(rs.next()) {
+	            MemberVO member = new MemberVO();
+	            member.setID(rs.getString(1));
+	            member.setPw(rs.getString(2));
+	            member.setName(rs.getString(3));
+	            member.setPhone(rs.getString(4));
+	            list.add(member);
+	         }
+	      
+	      }catch(SQLException e) {
+	         e.printStackTrace();
+	      }
+	      NewsMySQL.close(conn);
+	      return list;
 	}
 	
-	public ArrayList<NewsVO> search(String keyword){
-		return null;
-	}
+	public MemberVO search(String keyword){
+	      Connection conn = NewsMySQL.connect();
+	      MemberVO member = new MemberVO();
+	      try (Statement stmt = conn.createStatement();
+	            ResultSet rs = stmt.executeQuery("select ID,  pw, name ,phone "
+	                  + "from jdbcdb.member where ID = '"+keyword+"'");){   
+	    	  	if (rs.next()) {
+	            member.setID(rs.getString(1));
+	            
+	            member.setPw(rs.getString(2));
+	            member.setName(rs.getString(3));
+	            member.setPhone(rs.getString(4));
+	    	  	}
+	         
+	      
+	      }catch(SQLException e) {
+	         e.printStackTrace();
+	      }
+	      NewsMySQL.close(conn);
+	      return member;
+	   }
 	
 	public boolean insert(MemberVO vo) {
 		boolean result = true;
