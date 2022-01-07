@@ -1,15 +1,19 @@
 package controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import dao.MemberDAO;
 import dao.NewsDAO;
@@ -17,6 +21,7 @@ import vo.MemberVO;
 import vo.NewsVO;
 
 @WebServlet("/main")
+@MultipartConfig(location = "c:/Temp/uploadtest")
 public class NewsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -64,7 +69,7 @@ public class NewsServlet extends HttpServlet {
 			if (list != null && list.size() == 0) {
 				request.setAttribute("msg", keyword + "(이)가 포함된 글이 없습니다.");
 			} else {
-				request.setAttribute("list", dao.search(keyword, option));
+				request.setAttribute("list",dao.search(keyword,option));
 			}
 		}
 		request.getRequestDispatcher("/jspsrc/NewsView.jsp").forward(request, response);
@@ -89,6 +94,28 @@ public class NewsServlet extends HttpServlet {
 				member.setName(name);
 				member.setPw(password);
 				member.setPhone(phone);
+				response.setContentType("text/html;charset=utf-8");
+				PrintWriter out = response.getWriter();
+				request.setCharacterEncoding("utf-8");
+				String path = "c:/Temp/uploadtest";
+				File isDir = new File(path);
+				if (!isDir.isDirectory()) {
+					isDir.mkdirs();
+				}
+				Collection<Part> parts = request.getParts(); // 전달된 파트 컬렉션 개체에 담아주기
+				for (Part part : parts) {
+					String fileName = part.getSubmittedFileName();
+					if (fileName != null && fileName.equals("")) {
+						part.write(System.currentTimeMillis()+"_"+fileName); 
+						out.print("업로드한 파일 이름: " + fileName + "<br>");
+						out.print("크기: " + part.getSize() + "<br>");
+					} else if (fileName == null){
+						String partName = part.getName();
+						String fieldValue = request.getParameter(partName);
+						out.print(partName + " : " + fieldValue + "<br>");
+					}
+				}
+				out.close();
 				boolean result = memberDAO.insert(member);
 				if (result) {
 					request.setAttribute("msg", name + "님이 성공적으로 가입되었습니다.");

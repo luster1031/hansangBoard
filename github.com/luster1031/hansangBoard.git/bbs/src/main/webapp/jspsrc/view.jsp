@@ -55,7 +55,7 @@
 	if (name.equals(list.getWriter())) {
 	%>
 	<button type="button"
-		onclick="location.href = '/bbs/jspsrc/update.jsp?NID=<%=list.getNID()%>'">
+		onclick="location.href = '/bbs/jspsrc/update.jsp?NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>'">
 		수정
 	</botton>
 	<button type="button" onclick="location.href = '/bbs/main?action=delete&NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>'">

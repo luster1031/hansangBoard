@@ -17,6 +17,7 @@
 	<%
 		int NID = 0;
 		String name = request.getParameter("name");
+		String writer = request.getParameter("writer");
 		if(request.getParameter("NID")!= null){
 			NID = Integer.parseInt(request.getParameter("NID"));
 		}
@@ -27,7 +28,7 @@
 			out.println("</script>");
 		}
 		NewsVO list  = new NewsDAO().listOne(NID);
-		if(list != null && request.getParameter("writer").equals(name)){
+		if(list != null && writer.equals(name)){
 		%>
 			<h2 id="divT">게시판 수정</h2>
 			<hr>
@@ -42,11 +43,7 @@
 				<br>
 				<%
 				String writedate= list.getWritedate();
-				writedate = writedate.replace("년 ", "-");
-				writedate = writedate.replace("월 ", "-");
-				writedate = writedate.replace("일 ", "T");
-				writedate = writedate.replace("시 ", ":");
-				writedate = writedate.replace("분", "");
+				writedate = writedate.replace(" ", "T");
 				%>
 				날짜와 시간 :  <input id="n_dt" type="datetime-local" name="meetingDate" value=<%=writedate%>>
 				<br>
