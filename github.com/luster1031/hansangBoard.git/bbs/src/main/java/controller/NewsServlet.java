@@ -124,13 +124,13 @@ public class NewsServlet extends HttpServlet {
 			String pw = request.getParameter("password");
 			MemberVO member = memberDAO.search(ID);
 
-			if (member.getID() != null && member.getPw().equals(pw)) {
+			if (member.getID() != null && member.getPw().equals(pw) && !member.getID().isEmpty()) {
 				HttpSession session = request.getSession();
 				session.setAttribute("ID", ID);
-
+				System.out.println("zcxvadsfzc" + session.getAttribute("ID"));
 				doGet(request, response);
 //				request.getRequestDispatcher("/main").forward(request, response);
-			} else if (member.getID() != null && !(member.getPw()).equals(pw)) {
+			} else if (member.getID() != null && !(member.getPw()).equals(pw) && !member.getID().isEmpty()) {
 				System.out.println("비밀번가 틀렸어요..");
 				request.setAttribute("msg", "비밀번가 틀렸어요..");
 				request.getRequestDispatcher("/jspsrc/login.jsp").forward(request, response);

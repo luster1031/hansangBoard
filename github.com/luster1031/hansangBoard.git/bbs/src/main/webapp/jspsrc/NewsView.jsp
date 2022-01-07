@@ -65,14 +65,20 @@ a, a:hover {
 	
 	<hr>
 	<button type = "button" onclick= "location.href = '/bbs/jspsrc/write.jsp'">게시글 작성</button>
-	<button onclick="displayDiv(2);">미팅 정보 검색</button>
+	<hr>
+	<form method = "get" action ="/bbs/main">
+			검색어 : <input type = "search" name = "keyword" >
+			<input type = "submit" value = "검색">
+	</form>
+	<hr>
+	
 	<% 
-	if (session1.getAttribute("ID") == null){
-		%><a href = '/bbs/jspsrc/login.jsp'>로그인</a>
+	if (session1.getAttribute("ID") == null){%>
+		<button  type = "button" onclick= "location.href = '/bbs/jspsrc/login.jsp'" >로그인</button>
+		
 	<%}else {%>
 		<button  type = "button" onclick= "location.href = '/bbs/main?logout=0'" >로그아웃</button>
-	<%}
-	%>
+	<%}%>
 	
 	<a href = '/bbs/jspsrc/signUp.jsp'>회원가입</a>
 	<script>
@@ -85,13 +91,5 @@ a, a:hover {
 		}
 	</script>
 	
-	<div id="search" style="display:none">
-		<form method = "get" action ="/bbs/main">
-			검색어 : <input type = "search" name = "keyword" >
-			<input type = "submit" value = "검색">
-			<hr>
-			<button type="button" onclick="location.href='/mvc/meeting' ">전체 미팅 스케쥴 보기</button>
-		</form>
-	</div>
 </body>
 </html>

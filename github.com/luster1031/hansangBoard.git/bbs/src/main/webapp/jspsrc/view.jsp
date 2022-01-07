@@ -57,15 +57,14 @@
 	<button type="button"
 		onclick="location.href = '/bbs/jspsrc/update.jsp?NID=<%=list.getNID()%>'">
 		수정
-		</botton>
-		<button type="button"
-			onclick="location.href = '/bbs/main?action=delete&NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>'">
-			삭제
-			</botton>
-			<%
-			}
-			}
-			%>
+	</botton>
+	<button type="button" onclick="location.href = '/bbs/main?action=delete&NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>'">
+		삭제
+	</botton>
+	<%
+	}
+}
+%>
 		
 </body>
 </html>
