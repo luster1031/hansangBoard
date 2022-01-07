@@ -53,7 +53,6 @@
 				<input type="hidden" name="cnt" value=<%=list.getCnt()%>>
 				<input type="hidden" name="NID" value=<%=list.getNID()%>>
 				<input type = "submit" value = "수정">
-				<input type = "reset" value = "재작성">
 			</form>
 	
 			

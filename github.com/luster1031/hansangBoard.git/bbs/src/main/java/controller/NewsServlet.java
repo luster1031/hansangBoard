@@ -26,6 +26,8 @@ public class NewsServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		NewsDAO dao = new NewsDAO();
 		
+		
+		
 		if(keyword == null) {
 			if(request.getParameter("NID")!= null) {
 				int NID = Integer.parseInt(request.getParameter("NID"));
@@ -67,6 +69,10 @@ public class NewsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//글작성,수정,로그인,회원가입 액션 변수?파라미터?에 담아서
 		request.setCharacterEncoding("UTF-8");
+		String sign = request.getParameter("sign");
+		String action = request.getParameter("action");
+		
+		
 		String NID = request.getParameter("NID");
 		String name = request.getParameter("name");
 		NewsDAO dao = new NewsDAO();
@@ -82,7 +88,7 @@ public class NewsServlet extends HttpServlet {
 		System.out.println("[post]:" + vo.getWriter() + " "+ vo.getTitle() + " "+ vo.getContent() + " "+ vo.getCnt()+ " "+vo.getNID()+ " "+ vo.getWritedate());
 		if(NID.equals("insert")) {
 			
-		}else {
+		}else if(Integer.parseInt(NID)>0){
 			System.out.println("[servlet_update]:" + vo.getWriter() + " | "+ vo.getTitle() + " | "+ vo.getContent() + " | "+ vo.getCnt()+ " | "+vo.getNID()+ " | "+ vo.getWritedate());
 			boolean result = dao.update(vo);
 			if (result) {			
