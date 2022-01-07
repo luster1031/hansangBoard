@@ -5,8 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+import javax.servlet.http.HttpSession;
 
 import com.mysql.cj.xdevapi.PreparableStatement.PreparableStatementFinalizer;
 
@@ -44,7 +49,7 @@ public class NewsDAO {
 		System.out.println("[keyword : ] "+ keyword);
 		try (Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery("select NID, writer, content, title,cnt, date_format(writedate, '%Y년 %m월 %d일 %H시 %i분') "
-						+ "from jdbcdb.contents where writer like '%"+keyword + "%'");){	
+						+ "from jdbcdb.contents where content like '%"+keyword + "%' OR title like '%"+keyword + "%'");){	
 			NewsVO vo;
 			while(rs.next()) {
 				vo = new NewsVO();
@@ -65,9 +70,24 @@ public class NewsDAO {
 	}
 	
 	public boolean insert(NewsVO vo) {
-		return false;
+		boolean result = true;
+		Connection conn = NewsMySQL.connect();
+		try (PreparedStatement pstmt = conn.prepareStatement("insert into contents (writer, content, title, writedate) values(? ,?, ?, ?)");){
+			
+			pstmt.setString(1, vo.getWriter());
+			pstmt.setString(2, vo.getContent());
+			pstmt.setString(3, vo.getTitle());
+			pstmt.setString(4, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")));
+			
+			pstmt.executeUpdate();			
+		}catch(SQLException e){
+			result = false;
+			e.printStackTrace();
+		}
+		NewsMySQL.close(conn);
+		return result;
 	}
-	
+
 	public boolean delete(int NID) {
 		boolean result = true;
 		System.out.println("[DAO_delete] NID : " + NID);
@@ -90,17 +110,19 @@ public class NewsDAO {
 		boolean result = true;
 		Connection conn = NewsMySQL.connect();
 		try (PreparedStatement pstmt = conn.prepareStatement(
-				"update jdbcdb.contents set "+ 
+				"update jdbcdb.contents set "+
 				"writer = ?, " + 
 				"content= ?, " + 
 				"title = ?, " +
-				"writedate = ? "+
+				"writedate = ?, "+
+				"cnt = ? "+
 				"where NID = ?");){
 			pstmt.setString(1, vo.getWriter());
 			pstmt.setString(2, vo.getContent());
 			pstmt.setString(3, vo.getTitle());
 			pstmt.setString(4, vo.getWritedate());
-			pstmt.setInt(5, vo.getNID());
+			pstmt.setInt(5, vo.getCnt());
+			pstmt.setInt(6, vo.getNID());
 			pstmt.executeUpdate();
 			System.out.println("[update]"+ vo.getWriter() + " "+ vo.getTitle() + " "+ vo.getContent() + " "+ vo.getWritedate()+ " "+vo.getCnt());
 		}catch(SQLException e){
@@ -114,7 +136,7 @@ public class NewsDAO {
 
 	public NewsVO listOne(int id) {
 		Connection conn = NewsMySQL.connect();
-		try(PreparedStatement pstmt = conn.prepareStatement("select NID, writer, content, title, cnt, date_format(writedate, '%Y년 %m월 %d일 %H시 %i분') from contents where `NID` = ?");
+		try(PreparedStatement pstmt = conn.prepareStatement("select NID, writer, content, title, cnt, date_format(writedate, '%Y-%m-%d %H:%i') from contents where `NID` = ?");
 			){
 			pstmt.setInt(1,id);
 			ResultSet rs = pstmt.executeQuery();

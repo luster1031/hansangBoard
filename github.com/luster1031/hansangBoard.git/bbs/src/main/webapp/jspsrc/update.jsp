@@ -16,23 +16,23 @@
 	
 	<%
 		int NID = 0;
+		String name = request.getParameter("name");
 		if(request.getParameter("NID")!= null){
 			NID = Integer.parseInt(request.getParameter("NID"));
 		}
 		if(NID == 0){
-			
 			out.println("<script>");
 			out.println("alert('유효하지 않는 글입니다.'");
 			out.println("location.href = 'signUp.jsp'");
 			out.println("</script>");
-			
 		}
 		NewsVO list  = new NewsDAO().listOne(NID);
-		if(list != null){
+		if(list != null && request.getParameter("writer").equals(name)){
 		%>
 			<h2 id="divT">게시판 수정</h2>
 			<hr>
 			<form method = "post" action = "/bbs/main">
+				<input type="hidden" name="action" value="update">>
 				<input type="hidden" name="NID" value=<%=NID%>>
 				수정자 : <input id="n_name" type="text"  name="name" value = <%=list.getWriter() %>>
 				<br>
@@ -56,7 +56,9 @@
 			</form>
 	
 			
-	<%} %>
-
+	<%}else{
+		request.setAttribute("msg","수정이 안됨 ㅠㅠ");
+		request.getRequestDispatcher("/main").forward(request, response);
+	} %>
 </body>
 </html>

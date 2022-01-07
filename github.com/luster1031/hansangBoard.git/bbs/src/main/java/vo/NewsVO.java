@@ -3,7 +3,6 @@ package vo;
 
 public class NewsVO {
 	private int NID;
-	private String ID;
 	private String writer;
 	private String content;
 	private String title;
@@ -16,12 +15,7 @@ public class NewsVO {
 	public void setNID(int nID) {
 		NID = nID;
 	}
-	public String getID() {
-		return ID;
-	}
-	public void setID(String iD) {
-		ID = iD;
-	}
+	
 	public String getWriter() {
 		return writer;
 	}

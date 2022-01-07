@@ -4,6 +4,7 @@ public class MemberVO {
 	private String ID;
 	private String pw;
 	private String name;
+	private String phone;
 	
 	public String getID() {
 		return ID;
@@ -23,11 +24,10 @@ public class MemberVO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getPhon() {
-		return phon;
+	public String getPhone() {
+		return phone;
 	}
-	public void setPhon(String phon) {
-		this.phon = phon;
+	public void setPhone(String phon) {
+		this.phone = phon;
 	}
-	private String phon;
 }
