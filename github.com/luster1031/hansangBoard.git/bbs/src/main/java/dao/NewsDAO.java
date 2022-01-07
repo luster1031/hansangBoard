@@ -68,8 +68,22 @@ public class NewsDAO {
 		return false;
 	}
 	
-	public boolean delete(int id) {
-		return false;	
+	public boolean delete(int NID) {
+		boolean result = true;
+		System.out.println("[DAO_delete] NID : " + NID);
+		
+		Connection conn = NewsMySQL.connect();
+		try (PreparedStatement pstmt = conn.prepareStatement("delete from jdbcdb.contents where NID = ?");){
+			pstmt.setInt(1,NID);
+			int deleteNum = pstmt.executeUpdate();
+			if(deleteNum != 1)
+				result = false;
+		}catch(SQLException e){
+			result = false;
+			e.printStackTrace();
+		}
+		NewsMySQL.close(conn);
+		return result;
 	}
 	
 	public boolean update(NewsVO vo) {
@@ -112,7 +126,7 @@ public class NewsDAO {
 				vo.setTitle(rs.getString(4));
 				vo.setCnt(Integer.parseInt(rs.getString(5)));
 				vo.setWritedate(rs.getString(6));
-				System.out.println(vo.getNID() + " "+ vo.getTitle());
+				System.out.println("[list_One]" + vo.getNID() + " "+ vo.getTitle());
 				return vo;
 			}
 		}catch(SQLException e) {

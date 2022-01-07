@@ -30,8 +30,8 @@
 		NewsVO list  = new NewsDAO().listOne(NID);
 		if(list != null){
 		%>
-			console.log(list.getWritedate());
-			<hr><h2 id="divT">게시판 수정</h2>
+			<h2 id="divT">게시판 수정</h2>
+			<hr>
 			<form method = "post" action = "/bbs/main">
 				<input type="hidden" name="NID" value=<%=NID%>>
 				수정자 : <input id="n_name" type="text"  name="name" value = <%=list.getWriter() %>>
@@ -43,6 +43,8 @@
 				
 				날짜와 시간 :  <input id="n_dt" type="datetime-local" name="meetingDate" value=<%=list.getWritedate()%>>
 				<br>
+				<input type="hidden" name="cnt" value=<%=list.getCnt()%>>
+				<input type="hidden" name="NID" value=<%=list.getNID()%>>
 				<input type = "submit" value = "수정">
 				<input type = "reset" value = "재작성">
 			</form>

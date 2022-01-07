@@ -8,7 +8,7 @@ public class NewsMySQL {
 		Connection conn = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver"); //Java 6 버전부터는 생략 가능
-			String url = "jdbc:mysql://localhost:3306/sqldb?characterEncoding=UTF-8&serverTimezone=UTC";
+			String url = "jdbc:mysql://localhost:3306/jdbcdb?characterEncoding=UTF-8&serverTimezone=UTC";
 			String user = "root";
 			String passwd = "1234";
 			conn = DriverManager.getConnection(url, user, passwd);						

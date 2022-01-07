@@ -18,19 +18,26 @@ public class NewsServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String keyword = request.getParameter("keyword");
-		String id = request.getParameter("id");
-		String NID = request.getParameter("NID");
-
+    	
+		var writer = request.getParameter("writer");
+		String name = request.getParameter("name");
 		NewsDAO dao = new NewsDAO();
+		
 		if(keyword == null) {
-			if(NID != null) {
-				boolean result = dao.delete(Integer.parseInt(id));
-				if (result) {
-					request.setAttribute("msg", "글이 성공적으로 삭제되었습니다.");
-				} else {
-					request.setAttribute("msg", "글이 삭제되지 않았습니다.");
-				}				
-			} 		
+			if(request.getParameter("NID")!= null) {
+				int NID = Integer.parseInt(request.getParameter("NID"));
+				System.out.println("[doGet] name : "  +name + " writer : "+ writer + " NID : " + NID );
+				if(writer.equals(name)) {
+					if(NID != 0) {
+						boolean result = dao.delete(NID);
+						if (result) {
+							request.setAttribute("msg", "글이 성공적으로 삭제되었습니다.");
+						} else {
+							request.setAttribute("msg", "글이 삭제되지 않았습니다.");
+						}				
+					} 				
+				}
+			}
 			request.setAttribute("list", dao.listAll());
 		} else {
 			List<NewsVO> list = dao.search(keyword);
@@ -48,20 +55,21 @@ public class NewsServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		String NID = request.getParameter("NID");
 		String name = request.getParameter("name");
-		String title = request.getParameter("title");
-		String content = request.getParameter("content");
-		String meetingDate = request.getParameter("meetingDate");
 		NewsDAO dao = new NewsDAO();
 		NewsVO vo = new NewsVO();
+		
+		vo.setNID(Integer.parseInt(NID));
 		vo.setWriter(name);
-		vo.setTitle(title);
-		vo.setContent(content);
-		vo.setWritedate(meetingDate);
-		System.out.println("[post]:" + vo.getWriter() + " "+ vo.getTitle() + " "+ vo.getContent() + " "+ meetingDate+ " "+NID);
+		vo.setTitle( request.getParameter("title"));
+		vo.setContent(request.getParameter("content"));
+		vo.setWritedate(request.getParameter("meetingDate"));
+		vo.setCnt(Integer.parseInt(request.getParameter("cnt")));
+		
+		System.out.println("[post]:" + vo.getWriter() + " "+ vo.getTitle() + " "+ vo.getContent() + " "+ vo.getCnt()+ " "+vo.getNID()+ " "+ vo.getWritedate());
 		if(NID.equals("insert")) {
 			
 		}else {
-			vo.setNID(Integer.parseInt(NID));
+			System.out.println("[servlet_update]:" + vo.getWriter() + " | "+ vo.getTitle() + " | "+ vo.getContent() + " | "+ vo.getCnt()+ " | "+vo.getNID()+ " | "+ vo.getWritedate());
 			boolean result = dao.update(vo);
 			if (result) {			
 				request.setAttribute("msg", name + "님의 글이 성공적으로 입력되었습니다.");			
