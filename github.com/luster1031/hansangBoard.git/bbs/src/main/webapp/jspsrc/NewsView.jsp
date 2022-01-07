@@ -7,11 +7,26 @@
 <head>
 <meta charset="UTF-8">
 <title>목록 보기</title>
+<link href="https://fonts.googleapis.com/css?family=Poor+Story:400" rel="stylesheet">
 <style type="text/css">
-a, a:hover {
-	color:#000000;
-	text-decoration:none;
-}
+    * {
+    	font-family: "Poor Story"   
+    }
+	td{
+		border-bottom : 2px dotted black;
+		padding-left : 20px;
+	}
+	tr:hover{ 
+		background-color : gray;	
+		font-weight : bold;
+	}
+	td:nth-child(2){
+		width : 300px;
+	}
+	a, a:hover {
+		color:#000000;
+		text-decoration:none;
+	}
 </style>
 </head>
 <body>
@@ -67,10 +82,17 @@ a, a:hover {
 	<button type = "button" onclick= "location.href = '/bbs/jspsrc/write.jsp'">게시글 작성</button>
 	<hr>
 	<form method = "get" action ="/bbs/main">
-			검색어 : <input type = "search" name = "keyword" >
+			검색어 : 
+			<select name= 'selectOption'>
+				<option value="title">제목 검색</option>
+				<option value="content">내용 검색</option>
+				<option value="writer">작성자 검색</option>
+			</select>
+			<input type = "search" name = "keyword" >
 			<input type = "submit" value = "검색">
 	</form>
 	<hr>
+	
 	
 	<% 
 	if (session1.getAttribute("ID") == null){%>

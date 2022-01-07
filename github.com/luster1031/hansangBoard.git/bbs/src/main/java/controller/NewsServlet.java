@@ -59,11 +59,12 @@ public class NewsServlet extends HttpServlet {
 			request.setAttribute("list", dao.listAll());
 
 		} else {
-			List<NewsVO> list = dao.search(keyword);
+			String option = request.getParameter("selectOption");
+			List<NewsVO> list = dao.search(keyword,option);
 			if (list != null && list.size() == 0) {
 				request.setAttribute("msg", keyword + "(이)가 포함된 글이 없습니다.");
 			} else {
-				request.setAttribute("list", dao.search(keyword));
+				request.setAttribute("list", dao.search(keyword, option));
 			}
 		}
 		request.getRequestDispatcher("/jspsrc/NewsView.jsp").forward(request, response);

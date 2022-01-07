@@ -10,10 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
-import javax.servlet.http.HttpSession;
-
-import com.mysql.cj.xdevapi.PreparableStatement.PreparableStatementFinalizer;
 
 import vo.NewsVO;
 
@@ -43,13 +39,14 @@ public class NewsDAO {
 		return list;
 	}
 	
-	public ArrayList<NewsVO> search(String keyword){
+	public ArrayList<NewsVO> search(String keyword, String option){
 		ArrayList<NewsVO> list = new ArrayList<>();
 		Connection conn = NewsMySQL.connect();
-		System.out.println("[keyword : ] "+ keyword);
+		System.out.println("[keyword : ] "+ keyword+ " "+ option);
 		try (Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery("select NID, writer, content, title,cnt, date_format(writedate, '%Y년 %m월 %d일 %H시 %i분') "
-						+ "from jdbcdb.contents where content like '%"+keyword + "%' OR title like '%"+keyword + "%'");){	
+						+ "from jdbcdb.contents "
+						+ "where "+ option +" like '%"+keyword + "%';");){	
 			NewsVO vo;
 			while(rs.next()) {
 				vo = new NewsVO();
