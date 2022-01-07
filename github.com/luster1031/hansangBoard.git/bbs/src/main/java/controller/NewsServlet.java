@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -17,6 +18,8 @@ public class NewsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter(); 
     	String keyword = request.getParameter("keyword");
     	
 		var writer = request.getParameter("writer");
@@ -29,16 +32,27 @@ public class NewsServlet extends HttpServlet {
 				System.out.println("[doGet] name : "  +name + " writer : "+ writer + " NID : " + NID );
 				if(writer.equals(name)) {
 					if(NID != 0) {
-						boolean result = dao.delete(NID);
+						/*
+						out.println("<script>"
+								+ "if (!confirm(\"확인(예) 또는 취소(아니오)를 선택해주세요.\")) {\r\n");
+										System.out.println("아ㅏ니요");
+						out.println("       } else {\r\n");
+						*/
+									boolean result = dao.delete(NID);
+						/*
+						out.println("        }</script>"); 
+						out.close();
+*/
 						if (result) {
 							request.setAttribute("msg", "글이 성공적으로 삭제되었습니다.");
 						} else {
 							request.setAttribute("msg", "글이 삭제되지 않았습니다.");
-						}				
+						}
 					} 				
 				}
 			}
 			request.setAttribute("list", dao.listAll());
+			
 		} else {
 			List<NewsVO> list = dao.search(keyword);
 			if (list != null && list.size() == 0) {

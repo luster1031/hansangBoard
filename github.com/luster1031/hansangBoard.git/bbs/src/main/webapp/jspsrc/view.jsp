@@ -13,17 +13,14 @@
 	<%
 		int NID = 0;
 		String name = "";
+		
 		if(request.getParameter("NID")!= null && request.getParameter("name")!=null){
 			NID = Integer.parseInt(request.getParameter("NID"));
 			name = request.getParameter("name");
-		}
-		if(NID == 0 && name.equals("")){
 			
-			out.println("<script>");
-			out.println("alert('유효하지 않는 글입니다.'");
-			out.println("location.href = 'signUp.jsp'");
-			out.println("</script>");
-			
+	    }
+		if(NID == 0 || name.equals("")){
+			request.getRequestDispatcher("/jspsrc/signUp.jsp").forward(request, response);
 		}
 		NewsVO list  = new NewsDAO().listOne(NID);
 		if(list != null){

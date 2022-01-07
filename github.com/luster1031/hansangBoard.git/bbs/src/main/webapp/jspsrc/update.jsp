@@ -38,10 +38,17 @@
 				<br>
 				게시판 제목 : <input id="n_title" type="text"  name="title" value=<%=list.getTitle()%>><br>
 				수정할 게시판 내용: <br>
-				<textarea id="n_content"  rows="3" cols="30" name = "content" value=<%= list.getContent() %>></textarea>
+				<textarea id="n_content"  rows="3" cols="30" name = "content"><%= list.getContent() %></textarea>
 				<br>
-				
-				날짜와 시간 :  <input id="n_dt" type="datetime-local" name="meetingDate" value=<%=list.getWritedate()%>>
+				<%
+				String writedate= list.getWritedate();
+				writedate = writedate.replace("년 ", "-");
+				writedate = writedate.replace("월 ", "-");
+				writedate = writedate.replace("일 ", "T");
+				writedate = writedate.replace("시 ", ":");
+				writedate = writedate.replace("분", "");
+				%>
+				날짜와 시간 :  <input id="n_dt" type="datetime-local" name="meetingDate" value=<%=writedate%>>
 				<br>
 				<input type="hidden" name="cnt" value=<%=list.getCnt()%>>
 				<input type="hidden" name="NID" value=<%=list.getNID()%>>

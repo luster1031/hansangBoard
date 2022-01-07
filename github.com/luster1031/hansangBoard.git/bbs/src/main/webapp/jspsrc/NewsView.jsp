@@ -36,7 +36,7 @@ a, a:hover {
 				<td class='<%= vo.getNID() %>'><%= vo.getNID() %></td>
 				<td class='<%= vo.getNID() %>'><%= vo.getWriter() %></td>
 				<td class='<%= vo.getNID() %>'><%= vo.getContent() %></td>
-				<td class='<%= vo.getNID() %>'><a href = "/bbs/jspsrc/view.jsp?NID=<%= vo.getNID() %>&name=hanna"><%= vo.getTitle() %></td>
+				<td class='<%= vo.getNID() %>'><a href = "/bbs/jspsrc/view.jsp?NID=<%= vo.getNID()%>&name=hanna"><%= vo.getTitle() %></td>
 				<td class='<%= vo.getNID() %>'><%= vo.getCnt() %></td>
 				<td class='<%= vo.getNID() %>'><%= vo.getWritedate() %></td>
 				<td>
