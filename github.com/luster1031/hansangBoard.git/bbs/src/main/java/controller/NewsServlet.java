@@ -100,7 +100,7 @@ public class NewsServlet extends HttpServlet {
 			}else {
 				
 			}
-			request.getRequestDispatcher("/jspsrc/meetingView.jsp").forward(request, response);
+			request.getRequestDispatcher("/main").forward(request, response);
 		
 		}else if (action.equals("select")) {
 			MemberDAO memberDAO = new MemberDAO();
