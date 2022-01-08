@@ -8,6 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>게시판 내용 보기</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
 <body>
 	<%
@@ -32,10 +33,10 @@
 		System.out.println("[글쓰기]cnt : " + list.getCnt());
 		dao.update(list);
 	%>
-
+	
 	<table>
 		<tr>
-			<th>게시판 글쓰기 양식</th>
+			<th>게시글 보기</th>
 		</tr>
 
 		<tr>
@@ -54,13 +55,8 @@
 	<%
 	if (name.equals(list.getWriter())) {
 	%>
-	<button type="button"
-		onclick="location.href = '/bbs/jspsrc/update.jsp?NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>'">
-		수정
-	</botton>
-	<button type="button" onclick="location.href = '/bbs/main?action=delete&NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>'">
-		삭제
-	</botton>
+	<a href="/bbs/jspsrc/update.jsp?NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>" class="btn btn-warning" >수정</a>
+	<a href="/bbs/main?action=delete&NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>" class="btn btn-danger" onclick="return confirm('Are you sure, you want to delete it?')">Delete Quote</a>
 	<%
 	}
 }

@@ -30,10 +30,18 @@ public class NewsServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		String keyword = request.getParameter("keyword");
-		String log = request.getParameter("logout");
+		String log = request.getParameter("logout");	// 로그인 체크
 		if (log != null) {
 			request.getSession().invalidate();
 		}
+
+		int page_strat = 0;	//	뽑아올 리스트의 row번호
+		String now_page = request.getParameter("page");	//	현재 페이지
+		if(now_page !=null) {
+			page_strat = (Integer.parseInt(now_page)-1)*5;
+			System.out.println("[곱하기 ] : " + page_strat);
+		}
+		
 		var writer = request.getParameter("writer");
 		String name = request.getParameter("name");
 		NewsDAO dao = new NewsDAO();
@@ -61,7 +69,11 @@ public class NewsServlet extends HttpServlet {
 					}
 				}
 			}
-			request.setAttribute("list", dao.listAll());
+			request.setAttribute("list", dao.listSelect(page_strat, 5));
+			request.setAttribute("now_page", now_page);
+			request.setAttribute("list_num",dao.count());
+			
+			
 
 		} else {
 			String option = request.getParameter("selectOption");

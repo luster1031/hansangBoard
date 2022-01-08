@@ -14,12 +14,51 @@ import java.util.List;
 import vo.NewsVO;
 
 public class NewsDAO {
+	//리스트 개수
+	public String count(){
+		Connection conn = NewsMySQL.connect();
+		try(Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM contents");){
+			if(rs.next()) {
+				return rs.getString(1);
+			}			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		NewsMySQL.close(conn);
+		return null;
+		
+	}
 	public List<NewsVO> listAll(){
 		List<NewsVO> list = new ArrayList<>();
 		Connection conn = NewsMySQL.connect();
 		try(Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery("select NID, writer, content, title, cnt, date_format(writedate, '%Y년 %m월 %d일 %H시 %i분') "
 						+ "from contents");){	
+			NewsVO vo;
+			while(rs.next()) {
+				vo = new NewsVO();
+				vo.setNID(Integer.parseInt(rs.getString(1)));
+				vo.setWriter(rs.getString(2));
+				vo.setContent(rs.getString(3));
+				vo.setTitle(rs.getString(4));
+				vo.setCnt(Integer.parseInt(rs.getString(5)));
+				vo.setWritedate(rs.getString(6));
+				System.out.println("[listAll]"+ vo.getWriter() + " "+ vo.getTitle() + " "+ vo.getContent() + " "+ vo.getWritedate()+ " "+vo.getCnt());
+				list.add(vo);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		NewsMySQL.close(conn);
+		return list;
+	}
+	public List<NewsVO> listSelect(int start, int end){
+		List<NewsVO> list = new ArrayList<>();
+		Connection conn = NewsMySQL.connect();
+		try(Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery("select NID, writer, content, title, cnt, date_format(writedate, '%Y년 %m월 %d일 %H시 %i분')"
+						+ "from contents limit " + start +", "+ end);){
 			NewsVO vo;
 			while(rs.next()) {
 				vo = new NewsVO();
