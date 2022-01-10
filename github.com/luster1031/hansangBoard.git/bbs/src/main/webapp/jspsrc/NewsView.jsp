@@ -99,8 +99,8 @@
 				<td><%= vo.getWritedate() %></td>
 				<%if(ID!=null&&(ID.equals(vo.getWriter()) || ID.equals("admin"))){ %>
 					<td>
-						<button  type = "button" class="btn btn-dark" onclick= "location.href =  '/bbs/main?keyword=listPage&action=delete&NID=<%= vo.getNID() %>&writer=<%=vo.getWriter()%>&name=<%=ID%>'" >삭제</button> 
-						<button type="button" class="btn btn-outline-dark"onclick= "location.href = '/mvc/images/delete.png'">수정</button>
+						<button  type = "button" class="btn btn-dark" onclick= "location.href =  '/bbs/jspsrc/update.jsp?NID=<%=vo.getNID()%>&writer=<%=vo.getWriter()%>&name=<%=ID%>'" >수정</button> 
+						<button type="button" class="btn btn-outline-dark"onclick= "location.href = '/bbs/main?keyword=listPage&action=delete&NID=<%=vo.getNID()%>&writer=<%=vo.getWriter()%>&name=<%=ID%>'">삭제</button>
 					</td>
 				<%}else{ %>
 				<td></td>

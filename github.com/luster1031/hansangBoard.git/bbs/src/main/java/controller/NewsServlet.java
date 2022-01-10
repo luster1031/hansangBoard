@@ -172,7 +172,7 @@ public class NewsServlet extends HttpServlet {
 				System.out.println("비밀번asd가 틀렸어요..");
 				request.getRequestDispatcher("/jspsrc/login.jsp").forward(request, response);
 			}
-
+			doGet(request, response);
 		} else if (action.equals("update")) {
 
 			String NID = request.getParameter("NID");
@@ -200,8 +200,8 @@ public class NewsServlet extends HttpServlet {
 				}
 			}
 			request.setAttribute("list",  dao.listSelect(1, 5));
-			
-			request.getRequestDispatcher("/jspsrc/NewsView.jsp").forward(request, response);
+			doGet(request, response);
+			//request.getRequestDispatcher("/jspsrc/NewsView.jsp").forward(request, response);
 		}
 		else if(action.equals("comment")) {
 			String content = request.getParameter("content");

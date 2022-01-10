@@ -58,25 +58,33 @@
 			if(list != null && writer.equals(name)){
 			%>
 				<h1 class="py-1 text-center fw-bolder">수정하기</h1>
-				<form name="form" method="POST" action="/bbs/main?keyword=listPage">
+				<form name="form" method="POST" action="/bbs/main?keyword=list">
 					<input type="hidden" name="action" value="update">
 					<input type="hidden" name="NID" value=<%=NID%>>
-					<input type="hidden" name="NID" value=<%=name%>>
+					<input type="hidden" name="name" value=<%=name%>>
+					<input type="hidden" name="writer" value=<%=writer%>>
 					<div class="pt-1"></div>
 					<input type="text" name="title" placeholder="제목을 입력해서 수정해주세요!" value=<%=list.getTitle()%>
 							style="border-radius: 5px; width: 100%; padding: 5px;">
-					<div class="pt-1">
-						<textarea id="summernote" name="content">
-						<%=list.getContent() %>
-						</textarea>
-					</div>
-					<script>
-						$('#summernote').summernote({
-							placeholder : '내용을 입력해주세요',
-							tabsize : 2,
-							height : 300
-						});
-					</script>
+					  
+					  <%
+						String writedate= list.getWritedate();
+						writedate = writedate.replace(" ", "T");
+						%>
+						<input id="n_dt" type="datetime-local" name="meetingDate" value=<%=writedate%>>
+						<br>    
+						<div class="pt-1">
+							<textarea id="summernote" name="content">
+								<%=list.getContent() %>
+							</textarea>
+						</div>
+						<script>
+							$('#summernote').summernote({
+								placeholder : '내용을 입력해주세요',
+								tabsize : 2,
+								height : 300
+							});
+						</script>
 					<div class="py-2">
 						    <div class="custom-file">
 						        <input type="file" class="custom-file-input" id="customFile" multiple lang="ar" dir="rtl">
@@ -96,13 +104,29 @@
 							<button class="btn btn btn-success" type="submit"
 								style="width: 10%; padding: 5px;">수정</button>
 						</div>
+						<div class="container">
+					
+      <script type="text/javascript">
+         $(function () {
+             $('#datetimepicker5').datetimepicker({
+                 defaultDate: "11/1/2013",
+                 disabledDates: [
+                     moment("12/25/2013"),
+                     new Date(2013, 11 - 1, 21),
+                     "11/22/2013 00:53"
+                 ]
+             });
+         });
+      </script>
+   </div>
+
 				</form>
 			</main>
 		</div>
 					
 		<%}else{
 			request.setAttribute("msg","수정이 안됨 ㅠㅠ");
-			request.getRequestDispatcher("/main?keyword=listPage").forward(request, response);
+			request.getRequestDispatcher("/main?keyword=list").forward(request, response);
 		} %>
 	</div>
 </body>

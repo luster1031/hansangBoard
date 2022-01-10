@@ -48,9 +48,13 @@
 					<%
 					// 줄 바꿈
 					String content = list.getContent();
-					for(int i = 0; i<content.length()-max_size;i+=max_size){%>
-						<%=content.substring(i, i+max_size)%><br>
-					<%}%>
+					if(content.length()>max_size){
+						for(int i = 0; i<content.length()-max_size;i+=max_size){%>
+							<%=content.substring(i, i+max_size)%><br>
+						<%}
+					}else{%>
+					<%=content %>
+				<% }%>
 			</tr>
 		</tbody>
 	</table>
