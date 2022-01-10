@@ -9,53 +9,101 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- include libraries(jQuery, bootstrap) -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+	integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+	integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+	crossorigin="anonymous"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+	integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+	crossorigin="anonymous"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>글쓰기</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
-<body>
-	
-	<%
-		int NID = 0;
-		String name = request.getParameter("name");
-		String writer = request.getParameter("writer");
-		if(request.getParameter("NID")!= null){
-			NID = Integer.parseInt(request.getParameter("NID"));
-		}
-		if(NID == 0){
-			out.println("<script>");
-			out.println("alert('유효하지 않는 글입니다.'");
-			out.println("location.href = 'signUp.jsp'");
-			out.println("</script>");
-		}
-		NewsVO list  = new NewsDAO().listOne(NID);
-		if(list != null && writer.equals(name)){
-		%>
-			<h2 id="divT">게시판 수정</h2>
-			<hr>
-			<form method = "post" action = "/bbs/main?keyword=listPage">
-				<input type="hidden" name="action" value="update">>
-				<input type="hidden" name="NID" value=<%=NID%>>
-				수정자 : <input id="n_name" type="text"  name="name" value = <%=list.getWriter() %>>
-				<br>
-				게시판 제목 : <input id="n_title" type="text"  name="title" value=<%=list.getTitle()%>><br>
-				수정할 게시판 내용: <br>
-				<textarea id="n_content"  rows="3" cols="30" name = "content"><%= list.getContent() %></textarea>
-				<br>
-				<%
-				String writedate= list.getWritedate();
-				writedate = writedate.replace(" ", "T");
-				%>
-				날짜와 시간 :  <input id="n_dt" type="datetime-local" name="meetingDate" value=<%=writedate%>>
-				<br>
-				<input type="hidden" name="cnt" value=<%=list.getCnt()%>>
-				<input type="hidden" name="NID" value=<%=list.getNID()%>>
-				<input type = "submit" value = "수정">
-			</form>
-	
-			
-	<%}else{
-		request.setAttribute("msg","수정이 안됨 ㅠㅠ");
-		request.getRequestDispatcher("/main?keyword=listPage").forward(request, response);
-	} %>
+<body class="bg-light test-center">
+<%@  include  file="css.jspf"  %>
+	<div class="container d-flex justify-content-center">
+		<div class="shadow-lg p-3 mb-2 bg-body rounded">
+			<main role="main" class="container">
+			<%
+			int NID = 0;
+			String name = request.getParameter("name");
+			String writer = request.getParameter("writer");
+			if(request.getParameter("NID")!= null){
+				NID = Integer.parseInt(request.getParameter("NID"));
+			}
+			if(NID == 0){
+				out.println("<script>");
+				out.println("alert('유효하지 않는 글입니다.'");
+				out.println("location.href = 'signUp.jsp'");
+				out.println("</script>");
+			}
+			NewsVO list  = new NewsDAO().listOne(NID);
+			if(list != null && writer.equals(name)){
+			%>
+				<h1 class="py-1 text-center fw-bolder">수정하기</h1>
+				<form name="form" method="POST" action="/bbs/main?keyword=listPage">
+					<input type="hidden" name="action" value="update">
+					<input type="hidden" name="NID" value=<%=NID%>>
+					<input type="hidden" name="NID" value=<%=name%>>
+					<div class="pt-1"></div>
+					<input type="text" name="title" placeholder="제목을 입력해서 수정해주세요!" value=<%=list.getTitle()%>
+							style="border-radius: 5px; width: 100%; padding: 5px;">
+					<div class="pt-1">
+						<textarea id="summernote" name="content">
+						<%=list.getContent() %>
+						</textarea>
+					</div>
+					<script>
+						$('#summernote').summernote({
+							placeholder : '내용을 입력해주세요',
+							tabsize : 2,
+							height : 300
+						});
+					</script>
+					<div class="py-2">
+						    <div class="custom-file">
+						        <input type="file" class="custom-file-input" id="customFile" multiple lang="ar" dir="rtl">
+						        <label class="custom-file-label text-left" for="customFile">파일을 선택하세요</label>
+						    </div>
+						</div>
+						<script type="text/javascript">
+						$('.custom-file input').change(function (e) {
+						    var files = [];
+						    for (var i = 0; i < $(this)[0].files.length; i++) {
+						        files.push($(this)[0].files[i].name);
+						    }
+						    $(this).next('.custom-file-label').html(files.join(', '));
+						});
+						</script>
+						<div class="pt-1 text-right">
+							<button class="btn btn btn-success" type="submit"
+								style="width: 10%; padding: 5px;">수정</button>
+						</div>
+				</form>
+			</main>
+		</div>
+					
+		<%}else{
+			request.setAttribute("msg","수정이 안됨 ㅠㅠ");
+			request.getRequestDispatcher("/main?keyword=listPage").forward(request, response);
+		} %>
+	</div>
 </body>
 </html>

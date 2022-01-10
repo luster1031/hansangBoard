@@ -185,7 +185,7 @@ public class NewsServlet extends HttpServlet {
 			vo.setTitle(request.getParameter("title"));
 			vo.setContent(request.getParameter("content"));
 			vo.setWritedate(request.getParameter("meetingDate"));
-			vo.setCnt(Integer.parseInt(request.getParameter("cnt")));
+			vo.setCnt(1);
 
 			System.out.println("[post]:" + vo.getWriter() + " " + vo.getTitle() + " " + vo.getContent() + " "
 					+ vo.getCnt() + " " + vo.getNID() + " " + vo.getWritedate());
@@ -199,7 +199,8 @@ public class NewsServlet extends HttpServlet {
 					request.setAttribute("msg", name + "님의 글이 입력되지 않았습니다.");
 				}
 			}
-			request.setAttribute("list", dao.listAll());
+			request.setAttribute("list",  dao.listSelect(1, 5));
+			
 			request.getRequestDispatcher("/jspsrc/NewsView.jsp").forward(request, response);
 		}
 		else if(action.equals("comment")) {

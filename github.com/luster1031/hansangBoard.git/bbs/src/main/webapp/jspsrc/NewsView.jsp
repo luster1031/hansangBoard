@@ -60,6 +60,7 @@
 //	마지막 페이징 버튼만 보이게
 	if(end_page_num > total_page){
 		end_page_num = total_page;
+		next_page = end_page_num;
     }
 	if(list !=null){
 	%>
@@ -167,7 +168,7 @@
 			   	
 			   	<a href="/bbs/main?keyword=<%=keyword%>&page=<%=i%>&option=<%=option%>" class=<%=class_str%>><%=i%></a>
 		 <%}
-		    if(now_page != total_page && now_page >= 0){
+		    if(now_page != total_page && now_page >= 0 && next_page!=total_page){
 		    %>	
 		    	<a href="/bbs/main?keyword=<%=keyword%>&page=<%=next_page%>&option=<%=option%>" class="arrow right">>></a>
 		    	<a href="/bbs/main?keyword=<%=keyword%>&page=<%=total_page%>&option=<%=option%>" class="last">끝</a>

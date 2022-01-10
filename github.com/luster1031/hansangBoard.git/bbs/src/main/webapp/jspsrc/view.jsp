@@ -30,40 +30,55 @@
 		dao.update(list);
 	%>
 	<div class="container">	
-	<table class="table">
+	<table class="table table-bordered">
+		
 		<h2>게시글 보기</h2>
-
-		<tr>
-			<td style="width: 20%;">글제목</td>
-			<td colspan="2"><%=list.getTitle()%></td>
-		</tr>
-		<tr>
-			<td>작성일자</td>
-			<td colspan="2"><%=list.getWritedate()%></td>
-		</tr>
-		<tr>
-			<td>내용</td>
-			<td colspan="2" style="min-height: 200px; text-align: left;">
-				<%
-				// 줄 바꿈
-				String content = list.getContent();
-				for(int i = 0; i<content.length()-max_size;i+=max_size){%>
-					<%=content.substring(i, i+max_size)%><br>
-				<%}%>
-		</tr>
+		<tbody>
+			<tr>
+				<th scope="row" style="width: 20%;">글제목</th>
+				<td colspan="2"><%=list.getTitle()%></td>
+			</tr>
+			<tr>
+				<th scope="row">작성일자</th>
+				<td colspan="2"><%=list.getWritedate()%></td>
+			</tr>
+			<tr>
+				<th scope="row">내용</th>
+				<td colspan="2" style="min-height: 200px; text-align: left;">
+					<%
+					// 줄 바꿈
+					String content = list.getContent();
+					for(int i = 0; i<content.length()-max_size;i+=max_size){%>
+						<%=content.substring(i, i+max_size)%><br>
+					<%}%>
+			</tr>
+		</tbody>
 	</table>
+	
 	<%
 	if (name.equals(list.getWriter()) || name.equals("admin")) {
-	%>
-	
-	<a href="/bbs/jspsrc/update.jsp?NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>" class="btn btn-warning" >수정</a>
-	<a href="/bbs/main?keyword=listPage&action=delete&NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>" class="btn btn-danger" onclick="return confirm('Are you sure, you want to delete it?')">Delete Quote</a>
-	<%
-	}
-
-
+		%>
+		<div class="row flex-nowrap justify-content-between align-items-center py-3">
+			<div class="col-4 pt-1">
+				<a class="btn btn-outline-dark" role="button" onclick="myComment()" style="width: 40%; padding: 5px;">댓글</button></a>
+			</div>
+			<div class="col-4 text-center">
+				<a class="blog-header-logo text-dark" href="#"></a>
+			</div>
+			<div class="col-4 text-center">
+				<a class="btn btn-success" href="/bbs/jspsrc/update.jsp?NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>"
+					role="button"style="width: 40%; padding: 5px;">수정</a>
+				
+				<a class="btn btn-danger" href="/bbs/main?keyword=listPage&action=delete&NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>" 
+				role="button" onclick="return confirm('Are you sure, you want to delete it?')" style="width: 40%; padding: 5px;">삭제</a>
+				
+			</div>
+		</div>
+		
+	<%}
 	System.out.println("[ID] : "+ list.getNID());
 	if(ID != null){%>
+	
 		<script type="text/javascript">
 			//새로 고침 시 재 등록 방지
 			function notReload(){
@@ -84,8 +99,6 @@
 			}
 			document.onkeydown = notReload;
 		</script>
-
-
 		<form method="post" onsubmit="return jbSubmit();" action = "/bbs/main?keyword=listPage">
 			<input type="hidden" name="action" value="comment">
 			<input type="hidden" name="name" value="<%=ID%>">
@@ -108,15 +121,20 @@
 					</ul>
 				</div>
 			</div>
+			
 		</form>	
 	
-
+	<script>
+		function myComment() {
+			document.getElementById("com").style.display = 'block';
+		}
+	</script>
 	<%}
 	CommentDAO com_dao = new CommentDAO();
 	List<CommentVO> comment_list = new CommentDAO().listAll(list.getNID());
 	if(comment_list != null && comment_list.size()!=0){%>
 		댓글 수 : <%=comment_list.size() %>
-		<section class="mb-5">
+		<section id = "com"class="mb-5 "style="display: none">
 			<div class="card bg-light">
 				<div class="card-body">
 				<%for(CommentVO vo : comment_list){ %>
@@ -143,9 +161,6 @@
 	<%}
 }%>
 
-<a class="btn btn-danger" href="/bbs/main?keyword=listPage&action=delete&NID=<%=list.getNID()%>&writer=<%=list.getWriter()%>&name=<%=ID%>" 
-		role="button" onclick="return confirm('Are you sure, you want to delete it?')" style="width: 10%; padding: 5px;">삭제</button>
-</a>
 </div>
 </body>
 </html>
