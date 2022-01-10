@@ -5,6 +5,7 @@
 			- 아니면, 목록 다시 보여주기
 		- 로그인 했으면 회원가입 안 보여주기
 		- 페이징
+		- 게시글 수 출력 : 전체, 검색시 나오는 수
  -->
 <%@page import="java.io.Console"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -15,75 +16,26 @@
 <head>
 <meta charset="UTF-8">
 <title>목록 보기</title>
-<!--  <link href="https://fonts.googleapis.com/css?family=Poor+Story:400" rel="stylesheet">-->
-<style type="text/css">
-    * {
-    	font-family: "Poor Story"   
-    }
-	td{
-		border-bottom : 2px dotted black;
-		padding-left : 20px;
-	}
-	tr:hover{ 
-		background-color : gray;	
-		font-weight : bold;
-	}
-	td:nth-child(2){
-		width : 300px;
-	}
-	a, a:hover {
-		color:#000000;
-		text-decoration:none;
-	}
-	.page{
-	  text-align: center;  // div 사이즈 영역 안에서의 center
-	  width: 50%;
-	 }
 
-.page_wrap {
-	text-align:center;
-	font-size:0;
- }
-.page_nation {
-	display:inline-block;
-}
-.page_nation .none {
-	display:none;
-}
-.page_nation a {
-	display:block;
-	margin:0 3px;
-	float:left;
-	border:1px solid #e6e6e6;
-	width:28px;
-	height:28px;
-	line-height:28px;
-	text-align:center;
-	background-color:#fff;
-	font-size:13px;
-	color:#999999;
-	text-decoration:none;
-}
-.page_nation .arrow {
-	border:1px solid #ccc;
-}
-.page_nation a.active {
-	background-color:#42454c;
-	color:#fff;
-	border:1px solid #42454c;
-}
-.first:hover, .last:hover, .left:hover, .right:hover{
-  color: #2e9cdf;}
-.page_nation .num:hover {
-  background-color: #2e9cdf;
-  color: #ffffff;
-  }
-</style>
 </head>
 <body>
+	<script type="text/javascript">
+	window.onpageshow =  function(event) {
+	    //back 이벤트 일 경우
+	    if (event.persisted) {
+	    	document.location.reload();
+	    }
+	}
+	</script>
+	<%@  include  file="css.jspf"  %>
+
 	<%
 	List<NewsVO> list = (List<NewsVO>)request.getAttribute("list");
-	
+	String keyword = "listPage";
+
+	if(request.getAttribute("keyword")!=null)
+		keyword = (String)request.getAttribute("keyword");
+	String option = (String)request.getAttribute("option");
 	//페이징
 	int now_page = 1;		//	현재 페이지 번호
 	int displayPage = 5;	//	한페이지에 게시글 5개  
@@ -94,62 +46,74 @@
 	int start_page = 1;			//	페이징 시작 숫자
 	int list_num = 0;	// 전체 테이블의 게시글 개수
 	int total_page = 0;	//	최대 페이징 번호
-	
+	if(request.getAttribute("list_num")!=null){
+		list_num = Integer.parseInt((String)request.getAttribute("list_num"));
+		total_page = (int)Math.ceil(list_num/(double)displayPage);
+	}
 	if(request.getAttribute("now_page")!=null){
 		now_page = Integer.parseInt((String)request.getAttribute("now_page"));
 		end_page_num = ((int)Math.ceil(now_page/(double)button_num))*button_num;		
 		start_page = end_page_num - (button_num) +1;
 		next_page = end_page_num+1;	
-		befor_page =start_page-button_num;
-		if(request.getAttribute("list_num")!=null){
-			list_num = Integer.parseInt((String)request.getAttribute("list_num"));
-			total_page = (int)Math.ceil(list_num/(double)displayPage);
-		//		마지막 페이징 버튼만 보이게
-			if(end_page_num > total_page){
-				end_page_num = total_page;
-		    }
-		}
-		
+		befor_page =start_page-button_num;	
 	}
-	
-	HttpSession session1 = request.getSession(true);
-	String ID = (String) session1.getAttribute("ID");
+//	마지막 페이징 버튼만 보이게
+	if(end_page_num > total_page){
+		end_page_num = total_page;
+    }
 	if(list !=null){
 	%>
-	<h2>게시판</h2><hr>
-	<table>
-		<th>번호</th>
-		<th>제목</th>
-		<th>작성자</th>
-		<th>조회수</th>
-		<th>작성일자</th>
-		<tr>	
+	<div class="container">
+	<h2>게시판</h2>
+	
+	<table class ="table table-hover">
+		<%if(request.getParameter("selectOption")!=null){ %>
+			<caption class="left_coption">검색 게시글 수 : <%=list.size()%></caption>
+		<%}else{ %>
+			<caption class="left_coption">전체 게시글 수 : <%=list_num%></caption>
+		<%} %>
+		<thead class="table-dark table-responsive">
+			<tr>
+				<th scope="col">번호</th>
+				<th scope="col">제목</th>
+				<th scope="col">작성자</th>
+				<th scope="col">조회수</th>
+				<th scope="col">작성일자</th>
+				<th scope="col"> </th>
+			</tr>
+		</thead>
 		<%
 		for(NewsVO vo : list){	
-		%>
+		%>	
+		<tbody>	
 			<tr>
-				<td class='<%= vo.getNID() %>'><%= vo.getNID() %></td>
-				<td class='<%= vo.getNID() %>'>
-				<%if(ID != null){ %>
-					<a href = "/bbs/jspsrc/view.jsp?NID=<%= vo.getNID()%>&name=<%=ID%>">
-				<%} %><%= vo.getTitle() %></td>
-				<td class='<%= vo.getNID() %>'><%= vo.getWriter() %></td>
-				
-				
-				<td class='<%= vo.getNID() %>'><%= vo.getCnt() %></td>
-				<td class='<%= vo.getNID() %>'><%= vo.getWritedate() %></td>
+				<th scope="row" class='<%= vo.getNID() %>'><%= vo.getNID() %></th>
 				<td>
-					<a href ="/bbs/main?action=delete&NID=<%= vo.getNID() %>&writer=<%=vo.getWriter()%>&name=<%=ID%>">
-					<img src = "/mvc/images/delete.png" width = '30'></a></td>
-				<td>
-					<a href = '/bbs/jspsrc/update.jsp?NID=<%=vo.getNID()%>&writer=<%=vo.getWriter()%>&name=<%=ID%>'>
-					<img src = "/mvc/images/edit.png" width = '30'></a>
+					<%if(ID != null){ %>
+						<a href = "/bbs/main?keyword=list&action=comment&NID=<%= vo.getNID()%>&name=<%=ID%>">
+					<%}%><%= vo.getTitle() %>
 				</td>
+				<td><%= vo.getWriter() %></td>
+				<td><%= vo.getCnt() %></td>
+				<td><%= vo.getWritedate() %></td>
+				<%if(ID!=null&&(ID.equals(vo.getWriter()) || ID.equals("admin"))){ %>
+					<td>
+						<button  type = "button" class="btn btn-dark" onclick= "location.href =  '/bbs/main?keyword=listPage&action=delete&NID=<%= vo.getNID() %>&writer=<%=vo.getWriter()%>&name=<%=ID%>'" >삭제</button> 
+						<button type="button" class="btn btn-outline-dark"onclick= "location.href = '/mvc/images/delete.png'">수정</button>
+					</td>
+				<%}else{ %>
+				<td></td>
+				<%} %>
 			</tr>
-		<%}%>
-	</table>
+		</tbody>
+		
+		<%}%>	
+		
+		</table>
+
+	</div>		
 	<%}
-	
+
 	
 	if (request.getAttribute("msg") != null) {
 	%>
@@ -159,16 +123,35 @@
 	<%}
 	%>
 	
-	<hr>
-	
+	<div class="container">		
+		<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-2 border-top">
+			<div class="col-md-1 d-flex align-items-center">
+				<a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1"></a>
+			</div>
+			<form method = "get" action ="/bbs/main">
+					<div class="input-group mb-3">
+						<select class="form-select" aria-label="Default select example" name= 'selectOption'>
+							<option value="title">제목 검색</option>
+							<option value="content">내용 검색</option>
+							<option value="writer">작성자 검색</option>
+						</select>
+						<input name = "keyword" type="search" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2">
+						<input class="btn btn-outline-secondary" type="submit" id="button-addon2" value = "검색">
+					</div>
+			</form>
+			<ul>
+				<input type = "button" class="btn btn-outline-dark text-end" value="게시글 작성 " onclick= "agecheck()">
+			</ul>
+		</footer>
+	</div>
 	<!-- 페이징 -->
 	<div class="page_wrap">
 		<div class="page_nation">
 			<%
 			if(now_page > button_num){
 			%>
-				<a href="/bbs/main" class="first">처음</a>
-				<a href="/bbs/main?page=<%=befor_page%>" class="arrow left">←</a>
+				<a href="/bbs/main?keyword=<%=keyword%>" class="first">처음</a>
+				<a href="/bbs/main?keyword=<%=keyword%>&page=<%=befor_page%>" class="arrow left">←</a>
 		   		
 		   	<%
 			}
@@ -182,39 +165,15 @@
 		   		}else
 		   			class_str = "num";%>
 			   	
-			   	<a href="/bbs/main?page=<%=i%>" class=<%=class_str%>><%=i%></a>
+			   	<a href="/bbs/main?keyword=<%=keyword%>&page=<%=i%>&option=<%=option%>" class=<%=class_str%>><%=i%></a>
 		 <%}
-			    if(now_page != total_page && now_page >= 0){
-			    %>	
-			    	<a href="/bbs/main?page=<%=next_page%>" class="arrow right">>></a>
-			    	<a href="/bbs/main?page=<%=total_page%>" class="last">끝</a>
-				<%}%>
+		    if(now_page != total_page && now_page >= 0){
+		    %>	
+		    	<a href="/bbs/main?keyword=<%=keyword%>&page=<%=next_page%>&option=<%=option%>" class="arrow right">>></a>
+		    	<a href="/bbs/main?keyword=<%=keyword%>&page=<%=total_page%>&option=<%=option%>" class="last">끝</a>
+			<%}%>
 		</div>
 	</div>
-  
-	<hr>
-	<input type = "button" value="게시글 작성 " onclick= "agecheck()">
-	<hr>
-	<form method = "get" action ="/bbs/main">
-			검색어 : 
-			<select name= 'selectOption'>
-				<option value="title">제목 검색</option>
-				<option value="content">내용 검색</option>
-				<option value="writer">작성자 검색</option>
-			</select>
-			<input type = "search" name = "keyword" >
-			<input type = "submit" value = "검색">
-	</form>
-	<hr>
-	
-	
-	<% 
-	if (session1.getAttribute("ID") == null){%>
-		<button  type = "button" onclick= "location.href = '/bbs/jspsrc/login.jsp'" >로그인</button>
-		<button  type = "button" onclick= "location.href = '/bbs/jspsrc/signUp.jsp'">회원가입</button>
-	<%}else {%>
-		<button  type = "button" onclick= "location.href = '/bbs/main?logout=0'" >로그아웃</button>
-	<%}%>
 
 	<!-- 로그인 안 하고 게시글 작성할 때 -->
 	<script>
@@ -225,7 +184,7 @@
 	      	if(flag ==true) {
 	       		location.href="/bbs/jspsrc/login.jsp";  //로그인 페이지로
 	      	}else{
-	      		location.href="/bbs/main";
+	      		location.href="/bbs/main?keyword=listPage";
 	      	}
 		<%}else{%>
 	      	location.href="/bbs/jspsrc/write.jsp";

@@ -1,0 +1,127 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap" rel="stylesheet">
+<style type="text/css">
+    * {
+    	font-family: 'Gowun Batang', serif;
+    }
+
+	
+	td:nth-child(2){
+		width : 300px;
+	}
+	a, a:hover {
+		color:#000000;
+		text-decoration:none;
+	}
+	.page{
+	  text-align: center;  
+	  width: 50%;
+	 }
+
+.page_wrap {
+	text-align:center;
+	font-size:0;
+ }
+.page_nation {
+	display:inline-block;
+}
+.page_nation .none {
+	display:none;
+}
+.page_nation a {
+	display:block;
+	margin:0 3px;
+	float:left;
+	border:1px solid #e6e6e6;
+	width:28px;
+	height:28px;
+	line-height:28px;
+	text-align:center;
+	background-color:#fff;
+	font-size:13px;
+	color:#999999;
+	text-decoration:none;
+}
+.page_nation .arrow {
+	border:1px solid #ccc;
+}
+.page_nation a.active {
+	background-color:#42454c;
+	color:#fff;
+	border:1px solid #42454c;
+}
+.first:hover, .last:hover, .left:hover, .right:hover{
+  color: #2e9cdf;}
+.page_nation .num:hover {
+  background-color: #2e9cdf;
+  color: #ffffff;
+  }
+.navbar-nav.navbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+}
+.navbar-end {
+    position: absolute;
+    left: 75%;
+    transform: translatex(-50%);
+}
+table{
+width:60%;
+height: 100px;
+margin: auto;
+
+text-align: center;
+}
+
+.left_coption {text-align: right;} 
+</style>
+</head>
+<body>
+	
+	<%
+	int max_size = 50;	//게시글 max사이즈
+	HttpSession session1 = request.getSession(true);
+	String ID = (String) session1.getAttribute("ID");
+	%>
+	<div class="container">
+		<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+			<a class="navbar-brand fs-2" href="/bbs/main">𝓗𝓪𝓷𝓢𝓪𝓷𝓰</a>
+			<ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+				<li><a href="/bbs/main" class="nav-link px-2 link-secondary fs-5" >메인페이지</a></li>
+				<li><a href="/bbs/main?keyword=listPage" class="nav-link px-2 link-dark fs-5">게시판</a></li>
+			</ul>
+			<% if (ID == null){%>
+				<div class="col-md-2 text-end">
+					
+					<button  type = "button" class="btn btn-dark" onclick= "location.href = '/bbs/jspsrc/login.jsp'" >로그인</button> 
+					<button type="button" class="btn btn-outline-dark"onclick= "location.href = '/bbs/jspsrc/signUp.jsp'">회원가입</button>
+				</div>
+			<%}else {%>
+				<div class="btn-group">
+					<a href="#" class="btn btn-primary active" aria-current="page"><%=ID%>님</a>
+					<button  type = "button" class="btn btn-outline-dark" onclick= "logOutCheck()" >로그아웃</button>
+				</div>
+			<%}%>
+		</header>
+	</div>
+	<script>
+	function logOutCheck() {
+	
+		var flag = confirm("로그아웃하시겠습니까?");// 확인 취소 구조로 창띄움
+      	if(flag ==true) {
+       		location.href="/bbs/main?keyword=listPage&logout=0";  //로그아웃
+      	}
+	}
+	</script>
+</body>
+</html>

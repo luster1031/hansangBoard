@@ -32,7 +32,7 @@
 		%>
 			<h2 id="divT">게시판 수정</h2>
 			<hr>
-			<form method = "post" action = "/bbs/main">
+			<form method = "post" action = "/bbs/main?keyword=listPage">
 				<input type="hidden" name="action" value="update">>
 				<input type="hidden" name="NID" value=<%=NID%>>
 				수정자 : <input id="n_name" type="text"  name="name" value = <%=list.getWriter() %>>
@@ -55,7 +55,7 @@
 			
 	<%}else{
 		request.setAttribute("msg","수정이 안됨 ㅠㅠ");
-		request.getRequestDispatcher("/main").forward(request, response);
+		request.getRequestDispatcher("/main?keyword=listPage").forward(request, response);
 	} %>
 </body>
 </html>

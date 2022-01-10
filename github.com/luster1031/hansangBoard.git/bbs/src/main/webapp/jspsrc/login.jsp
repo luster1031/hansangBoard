@@ -3,115 +3,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>한상-로그인</title>
-<style type="text/css">
-* {
-	box-sizing: border-box;
-}
- 
-*:focus {
-	outline: none;
-}
-body {
-	font-family: Arial;
-	background-color: #3498DB;
-	padding: 50px;
-}
-.login {
-margin: 20px auto;
-width: 300px;
-}
-.login-screen {
-background-color: #FFF;
-padding: 20px;
-border-radius: 5px
-}
- 
-.app-title {
-text-align: center;
-color: #777;
-}
- 
-.login-form {
-text-align: center;
-}
-.control-group {
-margin-bottom: 10px;
-}
- 
-input {
-	text-align: center;
-	background-color: #ECF0F1;
-	border: 2px solid transparent;
-	border-radius: 3px;
-	font-size: 16px;
-	font-weight: 200;
-	padding: 10px 0;
-	width: 250px;
-	transition: border .5s;
-}
- 
-input:focus {
-border: 2px solid #3498DB;
-box-shadow: none;
-}
- 
-.btn {
-  border: 2px solid transparent;
-  background: #3498DB;
-  color: #ffffff;
-  font-size: 16px;
-  line-height: 25px;
-  padding: 10px 0;
-  text-decoration: none;
-  text-shadow: none;
-  border-radius: 3px;
-  box-shadow: none;
-  transition: 0.25s;
-  display: block;
-  width: 250px;
-  margin: 0 auto;
-}
- 
-.btn:hover {
-  background-color: #2980B9;
-}
- 
-.login-link {
-  font-size: 12px;
-  color: #444;
-  display: block;
-	margin-top: 12px;
-}
-</style>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>로그인</title>
 
+    <!-- Bootstrap core CSS -->
+	<link href="/bbs/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+ 
+    <!-- Custom styles for this template -->
+    <link href="/bbs/css/signin.css" rel="stylesheet">
 </head>
-<body>
-	<form method = "post" action = "/bbs/main">
-		<input type="hidden" name="action" value="select">
-		<div class="login">
-			<div class="login-screen">
-				<div class="app-title">
-					<h1>한상 - Login</h1>
+<body class="text-center">
+	<main class="form-signin">
+		<form method = "post" action = "/bbs/main?keyword=listPage" >
+			<input type="hidden" name="action" value="select">
+			<img src="/bbs/img/hansang.png" alt="" width="300" height="200">
+			
+			<div class="shadow-lg p-3 mb-2 bg-body rounded">	
+			    <h1 class="h3 fw-bolder">로그인하세요</h1>
+				<div class="form-floating mb-1">
+		      		<input type="text" class="form-control" id="floatingInput" name="id" placeholder="아이디를 입력하세요">
+		      		<label for="floatingInput">input your id</label>
+		    	</div>
+		    	<div class="form-floating">
+		      		<input type="password" class="form-control" id="floatingPassword" name="password" placeholder="비밀번호를 입력하세요">
+		      		<label for="floatingPassword">Password</label>
+		   		 </div>
+		   		 <button class="w-100 p-2 btn btn-lg btn-secondary" type="submit">Sign in</button>
+	   		 </div>
+	   		<div class="d-grid gap-1">
+	    		<div class="d-grid gap-1 d-md-block">
+	    			<button class="w-30 p-2 btn btn-dark" type="reset"  onclick="location.href='/bbs/main?keyword=listPage'" >게시글보기</button>
+					<button class="w-30 p-2 btn btn-outline-dark"type="button" >재작성</button>
 				</div>
-			<div class="login-form">
-				<div class="control-group">
-					<input type="text" class="login-field" value="" placeholder="아이디" name="id">
-					<label class="login-field-icon fui-user" for="login-name"></label>
-				</div>
-				<div class="control-group">
-					<input type="password" class="login-field" value="" placeholder="비밀번호" name="password">
-					<label class="login-field-icon fui-lock" for="login-pass"></label>
-				</div>
-                <input type="submit" value="Log in" class="btn btn-primary btn-large btn-block" >
-			    <br>
 			</div>
-		</div>
-	</div>
-	<button type="reset"  onclick="location.href='/bbs/main'" class="btn btn-dark">이전페이지로 가기</button>
-	<button type="button" class="btn btn-outline-dark">재작성</button>
-</form>
+		</form>		
+	</main>
 </body>
 </html>
+  

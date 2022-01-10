@@ -78,14 +78,15 @@ public class NewsDAO {
 		return list;
 	}
 	
-	public ArrayList<NewsVO> search(String keyword, String option){
+	public ArrayList<NewsVO> search(String keyword, String option,int start, int end){
 		ArrayList<NewsVO> list = new ArrayList<>();
 		Connection conn = NewsMySQL.connect();
 		System.out.println("[keyword : ] "+ keyword+ " "+ option);
 		try (Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery("select NID, writer, content, title,cnt, date_format(writedate, '%Y년 %m월 %d일 %H시 %i분') "
-						+ "from jdbcdb.contents "
-						+ "where "+ option +" like '%"+keyword + "%';");){	
+						+ "from contents "
+						+ " where "+ option +" like '%"+keyword + "%'"
+								+ "limit "+ start + ", " + end);){	
 			NewsVO vo;
 			while(rs.next()) {
 				vo = new NewsVO();
